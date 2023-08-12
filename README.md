@@ -70,7 +70,7 @@ print("Before SMOTE: ", sorted(Counter(y_train).items()))
 # Create a SMOTE instance
 sm = SMOTE(random_state=42)
 
-# Apply SMOTE to your training data
+# Apply SMOTE to training data
 X_train_res, y_train_res = sm.fit_resample(X_imputed, y_train)
 # Print the count of each class in the training set after applying SMOTE
 print("After SMOTE: ", sorted(Counter(y_train_res).items()))
@@ -90,7 +90,6 @@ X_test_scaled = scaler.transform(X_test)
 # print(f"train_df.shape:{train_df.shape}; valid_df.shape:{valid_df.shape}") 
 
 
-# Load your dataset
 X_train, y_train = X_train_scaled, y_train_res
 
 # Create the individual models
@@ -103,7 +102,7 @@ voting_clf = VotingClassifier(
     estimators=[('lr', log_clf), ('rf', rf_clf), ('svm', svm_clf)],
     voting='soft')  # Using 'soft' voting to predict the class label based on the argmax of the sums of the predicted probabilities
 
-# Define the hyperparameters you want to tune for each model
+# Define the hyperparameters to tune for each model
 param_grid = {
     'lr__C': [0.1, 1.0, 10.0],
     'rf__n_estimators': [50, 100, 200],
@@ -135,7 +134,7 @@ voting_clf = VotingClassifier(
 # Fit the ensemble model
 voting_clf.fit(X_train, y_train)
 
-# You can evaluate the ensemble's performance using cross-validation
+# Evaluate the ensemble's performance using cross-validation
 scores = cross_val_score(voting_clf, X_train, y_train, cv=5, scoring='recall')
 print("Recall: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
 ```
